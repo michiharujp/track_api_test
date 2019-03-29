@@ -38,8 +38,16 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
+    if @user.nil?
+      render json: { "message":"No User found" }
+      return
+    end
+
+    if user_params.nickname.nil? && user_params.comment.nil?
+      render json: { message: "User updation failed", cause: "not updatable user_id and password" }
+
     if @user.update(user_params)
-      render json: @user
+      render json: {message: "User successfully updated", recipe: disp_user}
     else
       render json: @user.errors, status: :unprocessable_entity
     end

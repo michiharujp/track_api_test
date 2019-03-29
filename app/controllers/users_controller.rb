@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
+  before_action :authentification, only[:show, :update, :destroy]
 
   # GET /users
   def index
@@ -73,6 +74,9 @@ class UsersController < ApplicationController
     end
 
     def authentification
-      request.headers[:Authorization]
+      if request.headers[:Authorization] == Base64.encode64(@user.user_id + ':' + @user.password)
+        render json: { "message":"Authentication Faild" }
+        return
+      end
     end
 end

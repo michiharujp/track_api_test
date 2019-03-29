@@ -71,4 +71,8 @@ class UsersController < ApplicationController
     def user_params
       params.fetch(:user, {})
     end
+
+    def authentification
+      request.headers[:Authorization]
+    end
 end
